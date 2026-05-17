@@ -14,6 +14,11 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminStudentsRouteImport } from './routes/admin.students'
+import { Route as AdminShavingsRouteImport } from './routes/admin.shavings'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as AdminClassesRouteImport } from './routes/admin.classes'
+import { Route as AdminBarbersRouteImport } from './routes/admin.barbers'
+import { Route as AdminStudentsIdRouteImport } from './routes/admin.students.$id'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -40,34 +45,104 @@ const AdminStudentsRoute = AdminStudentsRouteImport.update({
   path: '/students',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminShavingsRoute = AdminShavingsRouteImport.update({
+  id: '/shavings',
+  path: '/shavings',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminClassesRoute = AdminClassesRouteImport.update({
+  id: '/classes',
+  path: '/classes',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminBarbersRoute = AdminBarbersRouteImport.update({
+  id: '/barbers',
+  path: '/barbers',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminStudentsIdRoute = AdminStudentsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AdminStudentsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
-  '/admin/students': typeof AdminStudentsRoute
+  '/admin/barbers': typeof AdminBarbersRoute
+  '/admin/classes': typeof AdminClassesRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/shavings': typeof AdminShavingsRoute
+  '/admin/students': typeof AdminStudentsRouteWithChildren
   '/admin/': typeof AdminIndexRoute
+  '/admin/students/$id': typeof AdminStudentsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/admin/students': typeof AdminStudentsRoute
+  '/admin/barbers': typeof AdminBarbersRoute
+  '/admin/classes': typeof AdminClassesRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/shavings': typeof AdminShavingsRoute
+  '/admin/students': typeof AdminStudentsRouteWithChildren
   '/admin': typeof AdminIndexRoute
+  '/admin/students/$id': typeof AdminStudentsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
-  '/admin/students': typeof AdminStudentsRoute
+  '/admin/barbers': typeof AdminBarbersRoute
+  '/admin/classes': typeof AdminClassesRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/shavings': typeof AdminShavingsRoute
+  '/admin/students': typeof AdminStudentsRouteWithChildren
   '/admin/': typeof AdminIndexRoute
+  '/admin/students/$id': typeof AdminStudentsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/login' | '/admin/students' | '/admin/'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/admin/barbers'
+    | '/admin/classes'
+    | '/admin/settings'
+    | '/admin/shavings'
+    | '/admin/students'
+    | '/admin/'
+    | '/admin/students/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/admin/students' | '/admin'
-  id: '__root__' | '/' | '/admin' | '/login' | '/admin/students' | '/admin/'
+  to:
+    | '/'
+    | '/login'
+    | '/admin/barbers'
+    | '/admin/classes'
+    | '/admin/settings'
+    | '/admin/shavings'
+    | '/admin/students'
+    | '/admin'
+    | '/admin/students/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/admin/barbers'
+    | '/admin/classes'
+    | '/admin/settings'
+    | '/admin/shavings'
+    | '/admin/students'
+    | '/admin/'
+    | '/admin/students/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -113,16 +188,71 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminStudentsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/shavings': {
+      id: '/admin/shavings'
+      path: '/shavings'
+      fullPath: '/admin/shavings'
+      preLoaderRoute: typeof AdminShavingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/classes': {
+      id: '/admin/classes'
+      path: '/classes'
+      fullPath: '/admin/classes'
+      preLoaderRoute: typeof AdminClassesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/barbers': {
+      id: '/admin/barbers'
+      path: '/barbers'
+      fullPath: '/admin/barbers'
+      preLoaderRoute: typeof AdminBarbersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/students/$id': {
+      id: '/admin/students/$id'
+      path: '/$id'
+      fullPath: '/admin/students/$id'
+      preLoaderRoute: typeof AdminStudentsIdRouteImport
+      parentRoute: typeof AdminStudentsRoute
+    }
   }
 }
 
+interface AdminStudentsRouteChildren {
+  AdminStudentsIdRoute: typeof AdminStudentsIdRoute
+}
+
+const AdminStudentsRouteChildren: AdminStudentsRouteChildren = {
+  AdminStudentsIdRoute: AdminStudentsIdRoute,
+}
+
+const AdminStudentsRouteWithChildren = AdminStudentsRoute._addFileChildren(
+  AdminStudentsRouteChildren,
+)
+
 interface AdminRouteChildren {
-  AdminStudentsRoute: typeof AdminStudentsRoute
+  AdminBarbersRoute: typeof AdminBarbersRoute
+  AdminClassesRoute: typeof AdminClassesRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminShavingsRoute: typeof AdminShavingsRoute
+  AdminStudentsRoute: typeof AdminStudentsRouteWithChildren
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
-  AdminStudentsRoute: AdminStudentsRoute,
+  AdminBarbersRoute: AdminBarbersRoute,
+  AdminClassesRoute: AdminClassesRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
+  AdminShavingsRoute: AdminShavingsRoute,
+  AdminStudentsRoute: AdminStudentsRouteWithChildren,
   AdminIndexRoute: AdminIndexRoute,
 }
 
