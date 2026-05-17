@@ -9,38 +9,184 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as BarberRouteImport } from './routes/barber'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminStudentsRouteImport } from './routes/admin.students'
+import { Route as AdminShavingsRouteImport } from './routes/admin.shavings'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as AdminClassesRouteImport } from './routes/admin.classes'
+import { Route as AdminBarbersRouteImport } from './routes/admin.barbers'
+import { Route as AdminStudentsIdRouteImport } from './routes/admin.students.$id'
 
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BarberRoute = BarberRouteImport.update({
+  id: '/barber',
+  path: '/barber',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminStudentsRoute = AdminStudentsRouteImport.update({
+  id: '/students',
+  path: '/students',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminShavingsRoute = AdminShavingsRouteImport.update({
+  id: '/shavings',
+  path: '/shavings',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminClassesRoute = AdminClassesRouteImport.update({
+  id: '/classes',
+  path: '/classes',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminBarbersRoute = AdminBarbersRouteImport.update({
+  id: '/barbers',
+  path: '/barbers',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminStudentsIdRoute = AdminStudentsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AdminStudentsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/barber': typeof BarberRoute
+  '/login': typeof LoginRoute
+  '/admin/barbers': typeof AdminBarbersRoute
+  '/admin/classes': typeof AdminClassesRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/shavings': typeof AdminShavingsRoute
+  '/admin/students': typeof AdminStudentsRouteWithChildren
+  '/admin/': typeof AdminIndexRoute
+  '/admin/students/$id': typeof AdminStudentsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/barber': typeof BarberRoute
+  '/login': typeof LoginRoute
+  '/admin/barbers': typeof AdminBarbersRoute
+  '/admin/classes': typeof AdminClassesRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/shavings': typeof AdminShavingsRoute
+  '/admin/students': typeof AdminStudentsRouteWithChildren
+  '/admin': typeof AdminIndexRoute
+  '/admin/students/$id': typeof AdminStudentsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/barber': typeof BarberRoute
+  '/login': typeof LoginRoute
+  '/admin/barbers': typeof AdminBarbersRoute
+  '/admin/classes': typeof AdminClassesRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/shavings': typeof AdminShavingsRoute
+  '/admin/students': typeof AdminStudentsRouteWithChildren
+  '/admin/': typeof AdminIndexRoute
+  '/admin/students/$id': typeof AdminStudentsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/barber'
+    | '/login'
+    | '/admin/barbers'
+    | '/admin/classes'
+    | '/admin/settings'
+    | '/admin/shavings'
+    | '/admin/students'
+    | '/admin/'
+    | '/admin/students/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/barber'
+    | '/login'
+    | '/admin/barbers'
+    | '/admin/classes'
+    | '/admin/settings'
+    | '/admin/shavings'
+    | '/admin/students'
+    | '/admin'
+    | '/admin/students/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/barber'
+    | '/login'
+    | '/admin/barbers'
+    | '/admin/classes'
+    | '/admin/settings'
+    | '/admin/shavings'
+    | '/admin/students'
+    | '/admin/'
+    | '/admin/students/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  BarberRoute: typeof BarberRoute
+  LoginRoute: typeof LoginRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/barber': {
+      id: '/barber'
+      path: '/barber'
+      fullPath: '/barber'
+      preLoaderRoute: typeof BarberRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +194,96 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/students': {
+      id: '/admin/students'
+      path: '/students'
+      fullPath: '/admin/students'
+      preLoaderRoute: typeof AdminStudentsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/shavings': {
+      id: '/admin/shavings'
+      path: '/shavings'
+      fullPath: '/admin/shavings'
+      preLoaderRoute: typeof AdminShavingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/classes': {
+      id: '/admin/classes'
+      path: '/classes'
+      fullPath: '/admin/classes'
+      preLoaderRoute: typeof AdminClassesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/barbers': {
+      id: '/admin/barbers'
+      path: '/barbers'
+      fullPath: '/admin/barbers'
+      preLoaderRoute: typeof AdminBarbersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/students/$id': {
+      id: '/admin/students/$id'
+      path: '/$id'
+      fullPath: '/admin/students/$id'
+      preLoaderRoute: typeof AdminStudentsIdRouteImport
+      parentRoute: typeof AdminStudentsRoute
+    }
   }
 }
 
+interface AdminStudentsRouteChildren {
+  AdminStudentsIdRoute: typeof AdminStudentsIdRoute
+}
+
+const AdminStudentsRouteChildren: AdminStudentsRouteChildren = {
+  AdminStudentsIdRoute: AdminStudentsIdRoute,
+}
+
+const AdminStudentsRouteWithChildren = AdminStudentsRoute._addFileChildren(
+  AdminStudentsRouteChildren,
+)
+
+interface AdminRouteChildren {
+  AdminBarbersRoute: typeof AdminBarbersRoute
+  AdminClassesRoute: typeof AdminClassesRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminShavingsRoute: typeof AdminShavingsRoute
+  AdminStudentsRoute: typeof AdminStudentsRouteWithChildren
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminBarbersRoute: AdminBarbersRoute,
+  AdminClassesRoute: AdminClassesRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
+  AdminShavingsRoute: AdminShavingsRoute,
+  AdminStudentsRoute: AdminStudentsRouteWithChildren,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  BarberRoute: BarberRoute,
+  LoginRoute: LoginRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
