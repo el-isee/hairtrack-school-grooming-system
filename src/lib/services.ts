@@ -129,14 +129,14 @@ export async function createStudent(input: CreateStudentInput): Promise<Student>
     fullName: input.fullName.trim(),
     className: input.className,
     secretCode: code,
-    photoURL,
     paymentAmount: paid ? settings.termPayment : 0,
-    paymentDate: paid ? Date.now() : undefined,
     remainingCuts: paid ? settings.allowedCutsPerTerm : 0,
     totalCutsUsed: 0,
     paid,
     createdAt: Date.now(),
   };
+  if (photoURL) student.photoURL = photoURL;
+  if (paid) student.paymentDate = Date.now();
   await setDoc(doc(db, "students", id), student);
   return student;
 }
