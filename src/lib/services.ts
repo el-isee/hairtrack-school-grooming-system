@@ -38,6 +38,26 @@ export async function getSettings(): Promise<Settings> {
 
 export async function updateSettings(s: Partial<Settings>) {
   await setDoc(SETTINGS_DOC, s, { merge: true });
+  if (s.allowedCutsPerTerm !== undefined || s.termPayment !== undefined) {
+    await syncStudentsWithSettings();
+  }
+}
+
+/** Re-applies global settings to all paid students so allowedCutsPerTerm / termPayment changes take effect immediately. */
+export async function syncStudentsWithSettings() {
+  const settings = await getSettings();
+  const snap = await getDocs(collection(db, "students"));
+  await Promise.all(
+    snap.docs.map((d) => {
+      const s = d.data() as Student;
+      if (!s.paid) return Promise.resolve();
+      const remaining = Math.max(0, settings.allowedCutsPerTerm - (s.totalCutsUsed || 0));
+      return updateDoc(doc(db, "students", d.id), {
+        remainingCuts: remaining,
+        paymentAmount: settings.termPayment,
+      });
+    }),
+  );
 }
 
 export function subscribeSettings(cb: (s: Settings) => void) {
