@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
   subscribeClasses, subscribeStudents, createStudent, deleteStudent, resetStudentPayment,
-  nameExists, updateStudent,
+  nameExists, updateStudent, uploadStudentPhoto,
 } from "@/lib/services";
 import type { SchoolClass, Student } from "@/lib/types";
 import { Card } from "@/components/ui/card";
