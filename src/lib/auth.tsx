@@ -59,18 +59,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, password: string) => {
     const cred = await signInWithEmailAndPassword(auth, email, password);
     const ref = doc(db, "users", cred.user.uid);
-    const snap = await getDoc(ref);
-    if (snap.exists()) return snap.data() as AppUser;
-    const role: Role = email === ADMIN_BOOTSTRAP_EMAIL ? "admin" : "barber";
-    const appUser: AppUser = {
-      uid: cred.user.uid,
-      email,
-      role,
-      displayName: email,
-      createdAt: Date.now(),
-    };
-    await setDoc(ref, appUser);
-    return appUser;
+    try {
+      const snap = await getDoc(ref);
+      if (snap.exists()) return snap.data() as AppUser;
+      const role: Role = email === ADMIN_BOOTSTRAP_EMAIL ? "admin" : "barber";
+      const appUser: AppUser = {
+        uid: cred.user.uid,
+        email,
+        role,
+        displayName: email,
+        createdAt: Date.now(),
+      };
+      await setDoc(ref, appUser);
+      return appUser;
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e);
+      if (msg.includes("offline") || msg.includes("unavailable")) {
+        throw new Error(
+          "Cannot reach Firestore. Make sure you've created a Firestore database in the Firebase console (project: essashave) and that your network/ad-blocker isn't blocking firestore.googleapis.com.",
+        );
+      }
+      throw e;
+    }
   };
 
   const logout = async () => {
