@@ -319,14 +319,51 @@ function AddStudentForm({ classes, onDone }: { classes: SchoolClass[]; onDone: (
 function EditStudentForm({ student, classes, onDone }: { student: Student; classes: SchoolClass[]; onDone: () => void }) {
   const [fullName, setFullName] = useState(student.fullName);
   const [className, setClassName] = useState(student.className);
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string>(student.photoURL || "");
+  const [saving, setSaving] = useState(false);
   return (
     <form onSubmit={async (e) => {
       e.preventDefault();
-      await updateStudent(student.id, { fullName, className });
-      toast.success("Student updated");
-      onDone();
+      setSaving(true);
+      try {
+        const patch: Partial<Student> = { fullName, className };
+        if (photoFile) patch.photoURL = await uploadStudentPhoto(photoFile, student.id);
+        await updateStudent(student.id, patch);
+        toast.success("Student updated");
+        onDone();
+      } catch (err) {
+        toast.error((err as Error).message);
+      } finally {
+        setSaving(false);
+      }
     }} className="space-y-4">
       <DialogHeader><DialogTitle>Edit student</DialogTitle></DialogHeader>
+
+      <div className="flex items-center gap-4 flex-wrap">
+        {preview ? (
+          <img src={preview} alt="" className="h-16 w-16 rounded-full object-cover border" />
+        ) : (
+          <div className="h-16 w-16 rounded-full bg-muted flex items-center justify-center text-xs text-muted-foreground">No photo</div>
+        )}
+        <div className="flex gap-2 flex-wrap">
+          <label className="cursor-pointer">
+            <input type="file" accept="image/*" className="hidden" onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) { setPhotoFile(f); setPreview(URL.createObjectURL(f)); }
+            }} />
+            <span className="inline-flex items-center px-3 py-1.5 text-xs border rounded-md hover:bg-muted">Choose photo</span>
+          </label>
+          <label className="cursor-pointer sm:hidden">
+            <input type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) { setPhotoFile(f); setPreview(URL.createObjectURL(f)); }
+            }} />
+            <span className="inline-flex items-center px-3 py-1.5 text-xs border rounded-md hover:bg-muted">Use camera</span>
+          </label>
+        </div>
+      </div>
+
       <div className="space-y-2">
         <Label>Full name</Label>
         <Input value={fullName} onChange={(e) => setFullName(e.target.value)} required />
@@ -342,7 +379,7 @@ function EditStudentForm({ student, classes, onDone }: { student: Student; class
       </div>
       <DialogFooter>
         <Button type="button" variant="ghost" onClick={onDone}>Cancel</Button>
-        <Button type="submit">Save changes</Button>
+        <Button type="submit" disabled={saving}>{saving ? "Saving…" : "Save changes"}</Button>
       </DialogFooter>
     </form>
   );
