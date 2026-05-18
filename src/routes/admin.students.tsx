@@ -243,20 +243,34 @@ function AddStudentForm({ classes, onDone }: { classes: SchoolClass[]; onDone: (
         <DialogDescription>A unique secret code will be generated automatically.</DialogDescription>
       </DialogHeader>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 flex-wrap">
         {preview ? (
           <img src={preview} alt="" className="h-16 w-16 rounded-full object-cover border" />
         ) : (
-          <div className="h-16 w-16 rounded-full bg-muted flex items-center justify-center text-xs text-muted-foreground">No photo</div>
+          <div className="h-16 w-16 rounded-full bg-muted flex items-center justify-center text-xs text-muted-foreground text-center px-1">Optional</div>
         )}
-        <label className="cursor-pointer">
-          <input type="file" accept="image/*" className="hidden" onChange={(e) => {
-            const f = e.target.files?.[0];
-            if (f) { setPhotoFile(f); setPreview(URL.createObjectURL(f)); }
-          }} />
-          <span className="inline-flex items-center px-3 py-1.5 text-xs border rounded-md hover:bg-muted">Upload photo</span>
-        </label>
+        <div className="flex gap-2 flex-wrap">
+          <label className="cursor-pointer">
+            <input type="file" accept="image/*" className="hidden" onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) { setPhotoFile(f); setPreview(URL.createObjectURL(f)); }
+            }} />
+            <span className="inline-flex items-center px-3 py-1.5 text-xs border rounded-md hover:bg-muted">Choose photo</span>
+          </label>
+          <label className="cursor-pointer sm:hidden">
+            <input type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) { setPhotoFile(f); setPreview(URL.createObjectURL(f)); }
+            }} />
+            <span className="inline-flex items-center px-3 py-1.5 text-xs border rounded-md hover:bg-muted">Use camera</span>
+          </label>
+          {preview && (
+            <button type="button" onClick={() => { setPhotoFile(null); setPreview(""); }}
+              className="inline-flex items-center px-3 py-1.5 text-xs border rounded-md hover:bg-muted text-destructive">Remove</button>
+          )}
+        </div>
       </div>
+      <p className="text-xs text-muted-foreground">Photo is optional.</p>
 
       <div className="space-y-2">
         <Label>Full name</Label>
