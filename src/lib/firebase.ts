@@ -17,7 +17,12 @@ export const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 // Auto long-polling avoids "client is offline" errors caused by proxies,
 // ad-blockers, or restrictive networks that block Firestore's WebChannel.
-export const db = getApps().length > 1 || (globalThis as any).__db
-  ? getFirestore(app)
-  : ((globalThis as any).__db = initializeFirestore(app, { experimentalAutoDetectLongPolling: true }));
+function initDb() {
+  try {
+    return initializeFirestore(app, { experimentalAutoDetectLongPolling: true });
+  } catch {
+    return getFirestore(app);
+  }
+}
+export const db = initDb();
 export const storage = getStorage(app);
