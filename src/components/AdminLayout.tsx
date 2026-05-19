@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import logo from "@/assets/hairtrack-logo.png";
 
 const NAV = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
@@ -98,9 +99,7 @@ function SidebarContent({
   return (
     <div className="flex flex-col h-full">
       <div className="h-16 flex items-center gap-2 px-5 border-b border-sidebar-border">
-        <div className="h-9 w-9 rounded-lg gradient-primary flex items-center justify-center">
-          <Scissors className="h-4 w-4 text-primary-foreground" />
-        </div>
+        <img src={logo} alt="HairTrack" className="h-9 w-9 rounded-lg object-contain bg-white p-0.5" />
         <div>
           <p className="font-display font-bold leading-none">HairTrack</p>
           <p className="text-[10px] uppercase tracking-wider text-sidebar-foreground/60 mt-0.5">Admin</p>
