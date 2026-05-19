@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/lib/auth";
 import { toast } from "sonner";
+import logo from "@/assets/hairtrack-logo.png";
 
 export const Route = createFileRoute("/login")({
   component: LoginPage,
@@ -38,10 +39,8 @@ function LoginPage() {
     <div className="min-h-screen grid lg:grid-cols-2">
       {/* Left visual */}
       <div className="hidden lg:flex relative gradient-hero text-primary-foreground p-12 flex-col justify-between overflow-hidden">
-        <div className="flex items-center gap-2 font-display text-xl font-bold">
-          <div className="h-10 w-10 rounded-xl bg-white/15 backdrop-blur flex items-center justify-center">
-            <Scissors className="h-5 w-5" />
-          </div>
+        <div className="flex items-center gap-3 font-display text-xl font-bold">
+          <img src={logo} alt="HairTrack" className="h-12 w-12 rounded-xl bg-white/95 p-1 object-contain shadow-soft" />
           HairTrack
         </div>
         <motion.div
@@ -72,10 +71,8 @@ function LoginPage() {
           animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-md"
         >
-          <div className="lg:hidden flex items-center gap-2 font-display text-xl font-bold text-primary mb-8">
-            <div className="h-10 w-10 rounded-xl gradient-primary text-primary-foreground flex items-center justify-center">
-              <Scissors className="h-5 w-5" />
-            </div>
+          <div className="lg:hidden flex items-center gap-3 font-display text-xl font-bold text-primary mb-8">
+            <img src={logo} alt="HairTrack" className="h-12 w-12 rounded-xl object-contain" />
             HairTrack
           </div>
           <h2 className="text-2xl font-bold">Sign in to your account</h2>
