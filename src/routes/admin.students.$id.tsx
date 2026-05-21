@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { getStudent, getStudentShavings } from "@/lib/services";
 import type { Shaving, Student } from "@/lib/types";
 import { Card } from "@/components/ui/card";
@@ -12,6 +13,7 @@ export const Route = createFileRoute("/admin/students/$id")({
 });
 
 function StudentDetail() {
+  const { t } = useTranslation();
   const { id } = Route.useParams();
   const [student, setStudent] = useState<Student | null>(null);
   const [shavings, setShavings] = useState<Shaving[]>([]);
@@ -26,13 +28,13 @@ function StudentDetail() {
     })();
   }, [id]);
 
-  if (loading) return <p className="text-muted-foreground">Loading…</p>;
-  if (!student) return <p>Student not found.</p>;
+  if (loading) return <p className="text-muted-foreground">{t("common.loading")}</p>;
+  if (!student) return <p>{t("students.notFound")}</p>;
 
   return (
     <div className="space-y-6">
       <Link to="/admin/students" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary">
-        <ArrowLeft className="h-4 w-4 mr-1" /> Back to students
+        <ArrowLeft className="h-4 w-4 mr-1" /> {t("students.backToStudents")}
       </Link>
 
       <div className="grid gap-6 lg:grid-cols-3">
@@ -49,37 +51,37 @@ function StudentDetail() {
             <p className="text-sm text-muted-foreground">{student.className}</p>
             <div className="mt-3"><StatusBadge student={student} /></div>
             <div className="mt-4 w-full p-3 rounded-lg bg-muted/50">
-              <p className="text-xs uppercase text-muted-foreground">Secret code</p>
+              <p className="text-xs uppercase text-muted-foreground">{t("students.secretCode")}</p>
               <p className="font-mono font-bold text-lg text-primary">{student.secretCode}</p>
             </div>
           </div>
         </Card>
 
         <Card className="p-6 lg:col-span-2 space-y-4">
-          <h3 className="font-semibold">Payment & cuts</h3>
+          <h3 className="font-semibold">{t("students.paymentCuts")}</h3>
           <div className="grid grid-cols-2 gap-4">
-            <Info label="Payment amount" value={`${student.paymentAmount.toLocaleString()} RWF`} />
-            <Info label="Payment date" value={student.paymentDate ? format(new Date(student.paymentDate), "PPP") : "—"} />
-            <Info label="Remaining cuts" value={student.remainingCuts} />
-            <Info label="Total cuts used" value={student.totalCutsUsed} />
+            <Info label={t("students.paymentAmount")} value={`${student.paymentAmount.toLocaleString()} RWF`} />
+            <Info label={t("students.paymentDate")} value={student.paymentDate ? format(new Date(student.paymentDate), "PPP") : "—"} />
+            <Info label={t("students.remainingCuts")} value={student.remainingCuts} />
+            <Info label={t("students.totalUsed")} value={student.totalCutsUsed} />
           </div>
         </Card>
       </div>
 
       <Card className="p-6">
         <h3 className="font-semibold mb-4 flex items-center gap-2">
-          <Scissors className="h-4 w-4" /> Shaving history
+          <Scissors className="h-4 w-4" /> {t("students.shavingHistory")}
         </h3>
         {shavings.length === 0 ? (
-          <p className="text-sm text-muted-foreground italic">No shavings yet.</p>
+          <p className="text-sm text-muted-foreground italic">{t("students.noShavingsYet")}</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-left text-xs uppercase text-muted-foreground border-b">
-                  <th className="py-2">Date</th>
-                  <th className="py-2">Barber</th>
-                  <th className="py-2 text-right">Price</th>
+                  <th className="py-2">{t("students.date")}</th>
+                  <th className="py-2">{t("students.barber")}</th>
+                  <th className="py-2 text-right">{t("students.price")}</th>
                 </tr>
               </thead>
               <tbody>

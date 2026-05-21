@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { useAuth } from "@/lib/auth";
@@ -10,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { StatusBadge } from "@/components/StatusBadge";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import {
   Scissors, Search, LogOut, ArrowLeft, ShieldCheck, CheckCircle2, XCircle,
 } from "lucide-react";
@@ -27,6 +29,7 @@ type Step = "search" | "verify" | "done";
 
 function BarberPage() {
   const { user, logout } = useAuth();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [step, setStep] = useState<Step>("search");
   const [query, setQuery] = useState("");
@@ -43,7 +46,7 @@ function BarberPage() {
     try {
       const r = await findStudentsByName(query);
       setResults(r);
-      if (r.length === 0) toast.info("No students match that name");
+      if (r.length === 0) toast.info(t("barberApp.noMatch"));
     } finally { setSearching(false); }
   }
 
@@ -53,7 +56,7 @@ function BarberPage() {
     try {
       const res = await confirmShave({ student: selected, enteredCode: code, barber: user });
       if (res.ok) {
-        toast.success("Shave confirmed ✂️");
+        toast.success(t("barberApp.confirmed"));
         setStep("done");
       } else {
         toast.error(res.reason);
@@ -73,11 +76,14 @@ function BarberPage() {
             <Scissors className="h-4 w-4 text-primary-foreground" />
           </div>
           <div className="flex-1">
-            <p className="font-display font-bold leading-none">HairTrack</p>
-            <p className="text-xs text-muted-foreground mt-0.5">Barber: {user?.displayName || user?.email}</p>
+            <p className="font-display font-bold leading-none">{t("app.name")}</p>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              {t("barberApp.barberLabel", { name: user?.displayName || user?.email })}
+            </p>
           </div>
+          <LanguageSwitcher />
           <Button size="sm" variant="ghost" onClick={async () => { await logout(); navigate({ to: "/login" }); }}>
-            <LogOut className="h-4 w-4 mr-1" /> Logout
+            <LogOut className="h-4 w-4 mr-1" /> {t("common.logout")}
           </Button>
         </div>
       </header>
@@ -88,15 +94,15 @@ function BarberPage() {
             {step === "search" && (
               <motion.div key="search" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
                 <Card className="p-5">
-                  <h2 className="font-bold text-lg">Find student</h2>
-                  <p className="text-sm text-muted-foreground mb-4">Search by name to verify and confirm a shave.</p>
+                  <h2 className="font-bold text-lg">{t("barberApp.findStudent")}</h2>
+                  <p className="text-sm text-muted-foreground mb-4">{t("barberApp.findDesc")}</p>
                   <form onSubmit={search} className="flex gap-2">
                     <div className="relative flex-1">
                       <Search className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                      <Input className="pl-9 h-12" placeholder="Type student name…" value={query} onChange={(e) => setQuery(e.target.value)} />
+                      <Input className="pl-9 h-12" placeholder={t("barberApp.typeName")} value={query} onChange={(e) => setQuery(e.target.value)} />
                     </div>
                     <Button type="submit" className="h-12 px-5 gradient-primary text-primary-foreground" disabled={searching}>
-                      {searching ? "…" : "Search"}
+                      {searching ? "…" : t("common.search")}
                     </Button>
                   </form>
                 </Card>
@@ -131,7 +137,7 @@ function BarberPage() {
             {step === "verify" && selected && (
               <motion.div key="verify" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}>
                 <button onClick={() => setStep("search")} className="text-sm text-muted-foreground hover:text-primary inline-flex items-center mb-4">
-                  <ArrowLeft className="h-4 w-4 mr-1" /> Back
+                  <ArrowLeft className="h-4 w-4 mr-1" /> {t("common.back")}
                 </button>
 
                 <Card className="p-6 text-center shadow-elevated">
@@ -149,12 +155,12 @@ function BarberPage() {
                   {(!selected.paid || selected.remainingCuts <= 0) ? (
                     <div className="mt-5 p-4 rounded-xl bg-destructive/10 text-destructive text-sm flex items-center gap-2 justify-center">
                       <XCircle className="h-4 w-4" />
-                      {!selected.paid ? "Student has not paid this term." : "No remaining shaves."}
+                      {!selected.paid ? t("barberApp.notPaidMsg") : t("barberApp.noShavesMsg")}
                     </div>
                   ) : (
                     <div className="mt-6 space-y-3 text-left">
                       <Label htmlFor="code" className="flex items-center gap-2 text-sm">
-                        <ShieldCheck className="h-4 w-4 text-primary" /> Ask student for their secret code
+                        <ShieldCheck className="h-4 w-4 text-primary" /> {t("barberApp.askCode")}
                       </Label>
                       <Input
                         id="code"
@@ -162,7 +168,7 @@ function BarberPage() {
                         autoCapitalize="characters"
                         value={code}
                         onChange={(e) => setCode(e.target.value.toUpperCase())}
-                        placeholder="e.g. TIGER4"
+                        placeholder={t("barberApp.codePlaceholder")}
                         className="h-14 text-center font-mono text-xl tracking-widest"
                       />
                       <Button
@@ -170,7 +176,7 @@ function BarberPage() {
                         disabled={confirming || !code}
                         className="w-full h-12 gradient-primary text-primary-foreground"
                       >
-                        {confirming ? "Verifying…" : "Confirm shave"}
+                        {confirming ? t("barberApp.verifying") : t("barberApp.confirmShave")}
                       </Button>
                     </div>
                   )}
@@ -188,12 +194,12 @@ function BarberPage() {
                   >
                     <CheckCircle2 className="h-10 w-10" />
                   </motion.div>
-                  <h2 className="mt-4 text-xl font-bold">Shave confirmed</h2>
+                  <h2 className="mt-4 text-xl font-bold">{t("barberApp.doneTitle")}</h2>
                   <p className="text-sm text-muted-foreground mt-1">
-                    {selected.fullName} — {selected.remainingCuts - 1} shave(s) remaining
+                    {t("barberApp.remainingLine", { name: selected.fullName, n: selected.remainingCuts - 1 })}
                   </p>
                   <Button className="mt-6 w-full h-12 gradient-primary text-primary-foreground" onClick={reset}>
-                    Next student
+                    {t("barberApp.nextStudent")}
                   </Button>
                 </Card>
               </motion.div>
