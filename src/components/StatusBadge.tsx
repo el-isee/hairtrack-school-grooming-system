@@ -1,17 +1,19 @@
+import { useTranslation } from "react-i18next";
 import type { Student } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 export function StatusBadge({ student }: { student: Student }) {
+  const { t } = useTranslation();
   if (!student.paid) {
-    return <Badge tone="gray">Not paid</Badge>;
+    return <Badge tone="gray">{t("status.notPaid")}</Badge>;
   }
   if (student.remainingCuts <= 0) {
-    return <Badge tone="red">No remaining shaves</Badge>;
+    return <Badge tone="red">{t("status.noRemaining")}</Badge>;
   }
   if (student.remainingCuts === 1) {
-    return <Badge tone="yellow">1 shave left</Badge>;
+    return <Badge tone="yellow">{t("status.oneLeft")}</Badge>;
   }
-  return <Badge tone="green">{student.remainingCuts} shaves left</Badge>;
+  return <Badge tone="green">{t("status.nLeft", { n: student.remainingCuts })}</Badge>;
 }
 
 export function Badge({
