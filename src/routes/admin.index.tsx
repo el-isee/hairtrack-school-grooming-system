@@ -105,9 +105,9 @@ function Dashboard() {
         </Card>
 
         <Card className="p-5">
-          <h3 className="font-semibold mb-4">Students by class</h3>
+          <h3 className="font-semibold mb-4">{t("dashboard.studentsByClass")}</h3>
           <div className="space-y-3">
-            {byClass.length === 0 && <EmptyHint label="No classes yet" />}
+            {byClass.length === 0 && <EmptyHint label={t("dashboard.noData")} />}
             {byClass.map((c) => {
               const pct = students.length ? (c.count / students.length) * 100 : 0;
               return (
