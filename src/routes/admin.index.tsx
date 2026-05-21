@@ -90,7 +90,7 @@ function Dashboard() {
 
       <div className="grid gap-6 lg:grid-cols-3">
         <Card className="p-5 lg:col-span-2">
-          <h3 className="font-semibold mb-4">Daily shaving activity (last 7 days)</h3>
+          <h3 className="font-semibold mb-4">{t("dashboard.dailyActivity")}</h3>
           <div className="h-64">
             <ResponsiveContainer>
               <BarChart data={daily}>
@@ -131,9 +131,9 @@ function Dashboard() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         <Card className="p-5">
-          <h3 className="font-semibold mb-4">Recent students</h3>
+          <h3 className="font-semibold mb-4">{t("dashboard.recentStudents")}</h3>
           {recentStudents.length === 0 ? (
-            <EmptyHint label="No students yet — add some from Students page." />
+            <EmptyHint label={t("dashboard.noData")} />
           ) : (
             <div className="space-y-2">
               {recentStudents.map((s) => (
@@ -151,9 +151,9 @@ function Dashboard() {
         </Card>
 
         <Card className="p-5">
-          <h3 className="font-semibold mb-4">Recent shavings</h3>
+          <h3 className="font-semibold mb-4">{t("dashboard.recentShavings")}</h3>
           {recentShavings.length === 0 ? (
-            <EmptyHint label="No shavings recorded yet." />
+            <EmptyHint label={t("dashboard.noData")} />
           ) : (
             <div className="space-y-2">
               {recentShavings.map((s) => (
@@ -164,7 +164,7 @@ function Dashboard() {
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">{s.studentName}</p>
                     <p className="text-xs text-muted-foreground truncate">
-                      by {s.barberName} · {format(new Date(s.createdAt), "MMM d, HH:mm")}
+                      {t("students.barber")}: {s.barberName} · {format(new Date(s.createdAt), "MMM d, HH:mm")}
                     </p>
                   </div>
                   <span className="text-xs font-medium text-success">+{s.pricePerShave} RWF</span>
@@ -176,17 +176,17 @@ function Dashboard() {
       </div>
 
       <Card className="p-5">
-        <h3 className="font-semibold mb-4">Barber performance</h3>
+        <h3 className="font-semibold mb-4">{t("dashboard.barberPerformance")}</h3>
         {barberPerf.length === 0 ? (
-          <EmptyHint label="No barber activity yet." />
+          <EmptyHint label={t("dashboard.noData")} />
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-left text-xs uppercase text-muted-foreground border-b">
-                  <th className="py-2">Barber</th>
-                  <th className="py-2 text-right">Shavings</th>
-                  <th className="py-2 text-right">Earnings (RWF)</th>
+                  <th className="py-2">{t("barbers.name")}</th>
+                  <th className="py-2 text-right">{t("barbers.shavings")}</th>
+                  <th className="py-2 text-right">{t("barbers.earnings")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -205,9 +205,9 @@ function Dashboard() {
 
       {settings && (
         <p className="text-xs text-muted-foreground text-center">
-          Term payment: <b>{settings.termPayment.toLocaleString()} RWF</b> ·
-          {" "}Allowed cuts/term: <b>{settings.allowedCutsPerTerm}</b> ·
-          {" "}Price per shave: <b>{settings.haircutPrice.toLocaleString()} RWF</b>
+          {t("settings.termPayment")}: <b>{settings.termPayment.toLocaleString()} RWF</b> ·
+          {" "}{t("settings.allowedCuts")}: <b>{settings.allowedCutsPerTerm}</b> ·
+          {" "}{t("settings.pricePerShave")}: <b>{settings.haircutPrice.toLocaleString()} RWF</b>
         </p>
       )}
     </div>
