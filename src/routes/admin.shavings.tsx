@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { subscribeShavings, subscribeClasses, subscribeUsers } from "@/lib/services";
 import type { Shaving, SchoolClass, AppUser } from "@/lib/types";
 import { Card } from "@/components/ui/card";
@@ -18,6 +19,7 @@ export const Route = createFileRoute("/admin/shavings")({
 });
 
 function ShavingsPage() {
+  const { t } = useTranslation();
   const [shavings, setShavings] = useState<Shaving[]>([]);
   const [classes, setClasses] = useState<SchoolClass[]>([]);
   const [barbers, setBarbers] = useState<AppUser[]>([]);
@@ -52,10 +54,10 @@ function ShavingsPage() {
     const doc = new jsPDF();
     doc.text("HairTrack — Shaving Report", 14, 16);
     doc.setFontSize(10);
-    doc.text(`Records: ${filtered.length} • Total: ${total.toLocaleString()} RWF`, 14, 22);
+    doc.text(`${filtered.length} • ${total.toLocaleString()} RWF`, 14, 22);
     autoTable(doc, {
       startY: 28,
-      head: [["Date", "Student", "Class", "Barber", "Price"]],
+      head: [[t("shavings.date"), t("shavings.student"), t("shavings.class"), t("shavings.barber"), t("shavings.price")]],
       body: filtered.map((s) => [
         format(new Date(s.createdAt), "PPp"),
         s.studentName, s.className, s.barberName, s.pricePerShave,
@@ -73,37 +75,37 @@ function ShavingsPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold">Shaving history</h1>
+          <h1 className="text-2xl font-bold">{t("shavings.title")}</h1>
           <p className="text-sm text-muted-foreground">
-            {filtered.length} records • Total {total.toLocaleString()} RWF
+            {t("shavings.recordsTotal", { n: filtered.length, total: total.toLocaleString() })}
           </p>
         </div>
-        <Button variant="outline" onClick={exportPdf} disabled={!filtered.length}>Export PDF</Button>
+        <Button variant="outline" onClick={exportPdf} disabled={!filtered.length}>{t("common.exportPdf")}</Button>
       </div>
 
       <Card className="p-4 space-y-3">
         <div className="relative">
           <Search className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-          <Input className="pl-9" placeholder="Search by student or barber…" value={q} onChange={(e) => setQ(e.target.value)} />
+          <Input className="pl-9" placeholder={t("shavings.searchPlaceholder")} value={q} onChange={(e) => setQ(e.target.value)} />
         </div>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
           <Select value={classFilter} onValueChange={setClassFilter}>
-            <SelectTrigger><SelectValue placeholder="Class" /></SelectTrigger>
+            <SelectTrigger><SelectValue placeholder={t("shavings.classPh")} /></SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All classes</SelectItem>
+              <SelectItem value="all">{t("shavings.allClasses")}</SelectItem>
               {classes.map((c) => <SelectItem key={c.id} value={c.name}>{c.name}</SelectItem>)}
             </SelectContent>
           </Select>
           <Select value={barberFilter} onValueChange={setBarberFilter}>
-            <SelectTrigger><SelectValue placeholder="Barber" /></SelectTrigger>
+            <SelectTrigger><SelectValue placeholder={t("shavings.barberPh")} /></SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All barbers</SelectItem>
+              <SelectItem value="all">{t("shavings.allBarbers")}</SelectItem>
               {barbers.map((b) => <SelectItem key={b.uid} value={b.uid}>{b.displayName || b.email}</SelectItem>)}
             </SelectContent>
           </Select>
           <Input type="date" value={from} onChange={(e) => setFrom(e.target.value)} />
           <Input type="date" value={to} onChange={(e) => setTo(e.target.value)} />
-          <Button variant="ghost" onClick={reset}>Reset</Button>
+          <Button variant="ghost" onClick={reset}>{t("common.reset")}</Button>
         </div>
       </Card>
 
@@ -112,16 +114,16 @@ function ShavingsPage() {
           <table className="w-full text-sm">
             <thead className="bg-muted/50 text-xs uppercase text-muted-foreground">
               <tr>
-                <th className="text-left p-3">Date</th>
-                <th className="text-left p-3">Student</th>
-                <th className="text-left p-3">Class</th>
-                <th className="text-left p-3">Barber</th>
-                <th className="text-right p-3">Price</th>
+                <th className="text-left p-3">{t("shavings.date")}</th>
+                <th className="text-left p-3">{t("shavings.student")}</th>
+                <th className="text-left p-3">{t("shavings.class")}</th>
+                <th className="text-left p-3">{t("shavings.barber")}</th>
+                <th className="text-right p-3">{t("shavings.price")}</th>
               </tr>
             </thead>
             <tbody>
               {filtered.length === 0 && (
-                <tr><td colSpan={5} className="p-10 text-center text-muted-foreground">No shavings match these filters</td></tr>
+                <tr><td colSpan={5} className="p-10 text-center text-muted-foreground">{t("shavings.noResults")}</td></tr>
               )}
               {filtered.map((s) => (
                 <tr key={s.id} className="border-t hover:bg-muted/30">
