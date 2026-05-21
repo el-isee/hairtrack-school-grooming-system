@@ -1,12 +1,12 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth";
 import { useState, type ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard,
   Users,
   GraduationCap,
-  Scissors,
   Settings as SettingsIcon,
   History,
   UserCog,
@@ -16,34 +16,34 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import logo from "@/assets/hairtrack-logo.png";
-
-const NAV = [
-  { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
-  { to: "/admin/students", label: "Students", icon: Users },
-  { to: "/admin/classes", label: "Classes", icon: GraduationCap },
-  { to: "/admin/barbers", label: "Barbers", icon: UserCog },
-  { to: "/admin/shavings", label: "Shaving History", icon: History },
-  { to: "/admin/settings", label: "Settings", icon: SettingsIcon },
-];
 
 export function AdminLayout({ children }: { children: ReactNode }) {
   const { user, logout } = useAuth();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const path = useRouterState({ select: (s) => s.location.pathname });
   const [open, setOpen] = useState(false);
+
+  const NAV = [
+    { to: "/admin", label: t("nav.dashboard"), icon: LayoutDashboard, exact: true },
+    { to: "/admin/students", label: t("nav.students"), icon: Users },
+    { to: "/admin/classes", label: t("nav.classes"), icon: GraduationCap },
+    { to: "/admin/barbers", label: t("nav.barbers"), icon: UserCog },
+    { to: "/admin/shavings", label: t("nav.shavingHistory"), icon: History },
+    { to: "/admin/settings", label: t("nav.settings"), icon: SettingsIcon },
+  ];
 
   const isActive = (to: string, exact?: boolean) =>
     exact ? path === to : path === to || path.startsWith(to + "/");
 
   return (
     <div className="min-h-screen bg-muted/30 flex">
-      {/* Desktop sidebar */}
       <aside className="hidden lg:flex w-64 flex-col bg-sidebar text-sidebar-foreground border-r border-sidebar-border">
-        <SidebarContent isActive={isActive} />
+        <SidebarContent nav={NAV} isActive={isActive} />
       </aside>
 
-      {/* Mobile sidebar */}
       <AnimatePresence>
         {open && (
           <>
@@ -62,24 +62,24 @@ export function AdminLayout({ children }: { children: ReactNode }) {
                   <X className="h-5 w-5" />
                 </button>
               </div>
-              <SidebarContent isActive={isActive} onNavigate={() => setOpen(false)} />
+              <SidebarContent nav={NAV} isActive={isActive} onNavigate={() => setOpen(false)} />
             </motion.aside>
           </>
         )}
       </AnimatePresence>
 
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Topbar */}
         <header className="h-16 bg-card border-b flex items-center gap-3 px-4 sm:px-6 sticky top-0 z-30">
           <button className="lg:hidden p-2 -ml-2 hover:bg-muted rounded-md" onClick={() => setOpen(true)}>
             <Menu className="h-5 w-5" />
           </button>
           <div className="flex-1">
-            <h1 className="text-sm font-semibold text-foreground">Admin Console</h1>
+            <h1 className="text-sm font-semibold text-foreground">{t("app.adminConsole")}</h1>
             <p className="text-xs text-muted-foreground">{user?.email}</p>
           </div>
+          <LanguageSwitcher />
           <Button variant="ghost" size="sm" onClick={async () => { await logout(); navigate({ to: "/login" }); }}>
-            <LogOut className="h-4 w-4 mr-2" /> Logout
+            <LogOut className="h-4 w-4 mr-2" /> {t("common.logout")}
           </Button>
         </header>
 
@@ -90,23 +90,26 @@ export function AdminLayout({ children }: { children: ReactNode }) {
 }
 
 function SidebarContent({
+  nav,
   isActive,
   onNavigate,
 }: {
+  nav: { to: string; label: string; icon: React.ComponentType<{ className?: string }>; exact?: boolean }[];
   isActive: (to: string, exact?: boolean) => boolean;
   onNavigate?: () => void;
 }) {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col h-full">
       <div className="h-16 flex items-center gap-2 px-5 border-b border-sidebar-border">
         <img src={logo} alt="HairTrack" className="h-9 w-9 rounded-lg object-contain bg-white p-0.5" />
         <div>
-          <p className="font-display font-bold leading-none">HairTrack</p>
-          <p className="text-[10px] uppercase tracking-wider text-sidebar-foreground/60 mt-0.5">Admin</p>
+          <p className="font-display font-bold leading-none">{t("app.name")}</p>
+          <p className="text-[10px] uppercase tracking-wider text-sidebar-foreground/60 mt-0.5">{t("app.admin")}</p>
         </div>
       </div>
       <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
-        {NAV.map((item) => {
+        {nav.map((item) => {
           const active = isActive(item.to, item.exact);
           const Icon = item.icon;
           return (
