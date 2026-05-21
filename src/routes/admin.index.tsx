@@ -21,6 +21,7 @@ export const Route = createFileRoute("/admin/")({
 });
 
 function Dashboard() {
+  const { t } = useTranslation();
   const [students, setStudents] = useState<Student[]>([]);
   const [shavings, setShavings] = useState<Shaving[]>([]);
   const [users, setUsers] = useState<AppUser[]>([]);
@@ -75,16 +76,16 @@ function Dashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Dashboard</h1>
-        <p className="text-sm text-muted-foreground">Real-time overview of HairTrack</p>
+        <h1 className="text-2xl font-bold">{t("dashboard.title")}</h1>
+        <p className="text-sm text-muted-foreground">{t("dashboard.subtitle")}</p>
       </div>
 
       <div className="grid gap-4 grid-cols-2 lg:grid-cols-5">
-        <Stat title="Total Students" value={students.length} icon={<Users />} />
-        <Stat title="Paid Students" value={paid} icon={<DollarSign />} tone="success" />
-        <Stat title="Money Collected" value={`${totalMoney.toLocaleString()} RWF`} icon={<TrendingUp />} tone="accent" />
-        <Stat title="Total Shavings" value={shavings.length} icon={<ScissorsIcon />} />
-        <Stat title="Active Barbers" value={activeBarbers} icon={<UserCog />} />
+        <Stat title={t("dashboard.totalStudents")} value={students.length} icon={<Users />} />
+        <Stat title={t("dashboard.paidStudents")} value={paid} icon={<DollarSign />} tone="success" />
+        <Stat title={t("dashboard.moneyCollected")} value={`${totalMoney.toLocaleString()} RWF`} icon={<TrendingUp />} tone="accent" />
+        <Stat title={t("dashboard.totalShavings")} value={shavings.length} icon={<ScissorsIcon />} />
+        <Stat title={t("dashboard.activeBarbers")} value={activeBarbers} icon={<UserCog />} />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
