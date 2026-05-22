@@ -1,0 +1,16 @@
+{
+  "name": "HairTrack — School Hair Management",
+  "short_name": "HairTrack",
+  "description": "Manage student hair-cut payments and verify shaving activity in your school.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#0e5566",
+  "lang": "en",
+  "icons": [
+    { "src": "/favicon.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/favicon.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
