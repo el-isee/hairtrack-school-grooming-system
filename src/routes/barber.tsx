@@ -275,7 +275,7 @@ function BarberHistory({ barberId }: { barberId: string }) {
     doc.text(`${filtered.length} records • ${total.toLocaleString()} RWF`, 14, 22);
     autoTable(doc, {
       startY: 28,
-      head: [[t("students.date"), t("students.student" as never) || "Student", t("students.class"), t("students.price")]],
+      head: [["Date", "Student", "Class", "Price (RWF)"]],
       body: filtered.map((s) => [
         format(new Date(s.createdAt), "PPp"),
         s.studentName, s.className, s.pricePerShave,
