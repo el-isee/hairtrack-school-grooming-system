@@ -1,21 +1,30 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { useAuth } from "@/lib/auth";
-import { confirmShave, findStudentsByName } from "@/lib/services";
-import type { Student } from "@/lib/types";
+import {
+  confirmShave, findStudentsByName, subscribeBarberShavings, subscribeClasses,
+} from "@/lib/services";
+import type { SchoolClass, Shaving, Student } from "@/lib/types";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
 import { StatusBadge } from "@/components/StatusBadge";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import {
-  Scissors, Search, LogOut, ArrowLeft, ShieldCheck, CheckCircle2, XCircle,
+  Scissors, Search, LogOut, ArrowLeft, ShieldCheck, CheckCircle2, XCircle, History,
 } from "lucide-react";
 import { toast } from "sonner";
+import { format } from "date-fns";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+
 
 export const Route = createFileRoute("/barber")({
   component: () => (
