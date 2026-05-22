@@ -189,6 +189,18 @@ export function subscribeShavings(cb: (s: Shaving[]) => void, max?: number) {
   });
 }
 
+export function subscribeBarberShavings(barberId: string, cb: (s: Shaving[]) => void) {
+  return onSnapshot(
+    query(collection(db, "shavings"), where("barberId", "==", barberId)),
+    (snap) => {
+      const list = snap.docs.map((d) => ({ id: d.id, ...(d.data() as Omit<Shaving, "id">) }));
+      list.sort((a, b) => b.createdAt - a.createdAt);
+      cb(list);
+    },
+  );
+}
+
+
 export async function getStudentShavings(studentId: string): Promise<Shaving[]> {
   const snap = await getDocs(
     query(collection(db, "shavings"), where("studentId", "==", studentId)),

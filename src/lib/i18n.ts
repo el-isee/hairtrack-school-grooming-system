@@ -203,6 +203,16 @@ const en = {
     doneTitle: "Shave confirmed",
     remainingLine: "{{name}} — {{n}} shave(s) remaining",
     nextStudent: "Next student",
+    tabScan: "New shave",
+    tabHistory: "My logs",
+    myLogsTitle: "My shaving logs",
+    myLogsSubtitle: "{{n}} record(s) • {{total}} RWF",
+    myLogsDesc: "These are the shaves you confirmed. They match the admin's records.",
+    searchLogs: "Search by student or class…",
+    fromDate: "From",
+    toDate: "To",
+    allClasses: "All classes",
+    noLogs: "No shavings found.",
   },
 };
 
@@ -407,6 +417,16 @@ const rw: typeof en = {
     doneTitle: "Kogosha kwemejwe",
     remainingLine: "{{name}} — inshuro {{n}} zisigaye",
     nextStudent: "Umunyeshuri ukurikira",
+    tabScan: "Kogosha gushya",
+    tabHistory: "Amateka yanjye",
+    myLogsTitle: "Amateka y'ibyo nakoze",
+    myLogsSubtitle: "Ibyanditse {{n}} • {{total}} RWF",
+    myLogsDesc: "Aya ni amakuru y'abo wogosheje. Ahuye n'ayo umuyobozi abona.",
+    searchLogs: "Shakisha izina cyangwa ishuri…",
+    fromDate: "Kuva",
+    toDate: "Kugeza",
+    allClasses: "Amashuri yose",
+    noLogs: "Nta makuru abonetse.",
   },
 };
 
