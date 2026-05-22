@@ -69,21 +69,27 @@ export function AdminLayout({ children }: { children: ReactNode }) {
       </AnimatePresence>
 
       <div className="flex-1 flex flex-col min-w-0">
-        <header className="h-16 bg-card border-b flex items-center gap-3 px-4 sm:px-6 sticky top-0 z-30">
+        <header className="h-16 bg-card border-b flex items-center gap-2 sm:gap-3 px-3 sm:px-6 sticky top-0 z-30">
           <button className="lg:hidden p-2 -ml-2 hover:bg-muted rounded-md" onClick={() => setOpen(true)}>
             <Menu className="h-5 w-5" />
           </button>
-          <div className="flex-1">
-            <h1 className="text-sm font-semibold text-foreground">{t("app.adminConsole")}</h1>
-            <p className="text-xs text-muted-foreground">{user?.email}</p>
+          <div className="flex-1 min-w-0">
+            <h1 className="text-sm font-semibold text-foreground truncate">{t("app.adminConsole")}</h1>
+            <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
           </div>
           <LanguageSwitcher />
-          <Button variant="ghost" size="sm" onClick={async () => { await logout(); navigate({ to: "/login" }); }}>
-            <LogOut className="h-4 w-4 mr-2" /> {t("common.logout")}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="px-2 sm:px-3"
+            onClick={async () => { await logout(); navigate({ to: "/login" }); }}
+          >
+            <LogOut className="h-4 w-4 sm:mr-2" />
+            <span className="hidden sm:inline">{t("common.logout")}</span>
           </Button>
         </header>
 
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1400px] w-full mx-auto">{children}</main>
+        <main className="flex-1 p-3 sm:p-6 lg:p-8 max-w-[1400px] w-full mx-auto">{children}</main>
       </div>
     </div>
   );
