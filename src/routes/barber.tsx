@@ -40,6 +40,7 @@ function BarberPage() {
   const { user, logout } = useAuth();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [tab, setTab] = useState<"scan" | "history">("scan");
   const [step, setStep] = useState<Step>("search");
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Student[]>([]);
@@ -47,6 +48,7 @@ function BarberPage() {
   const [selected, setSelected] = useState<Student | null>(null);
   const [code, setCode] = useState("");
   const [confirming, setConfirming] = useState(false);
+
 
   async function search(e?: React.FormEvent) {
     e?.preventDefault();
@@ -98,9 +100,26 @@ function BarberPage() {
       </header>
 
       <main className="flex-1 px-4 py-6">
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-2xl mx-auto space-y-4">
+          <div className="inline-flex p-1 rounded-lg bg-muted w-full sm:w-auto">
+            <button
+              onClick={() => setTab("scan")}
+              className={`flex-1 sm:flex-none px-4 py-2 text-sm font-medium rounded-md transition-colors ${tab === "scan" ? "bg-card shadow-soft text-foreground" : "text-muted-foreground"}`}
+            >
+              <Scissors className="h-4 w-4 inline mr-1.5" />{t("barberApp.tabScan")}
+            </button>
+            <button
+              onClick={() => setTab("history")}
+              className={`flex-1 sm:flex-none px-4 py-2 text-sm font-medium rounded-md transition-colors ${tab === "history" ? "bg-card shadow-soft text-foreground" : "text-muted-foreground"}`}
+            >
+              <History className="h-4 w-4 inline mr-1.5" />{t("barberApp.tabHistory")}
+            </button>
+          </div>
+
+          {tab === "history" && user ? <BarberHistory barberId={user.uid} /> : (
           <AnimatePresence mode="wait">
             {step === "search" && (
+
               <motion.div key="search" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
                 <Card className="p-5">
                   <h2 className="font-bold text-lg">{t("barberApp.findStudent")}</h2>
