@@ -233,8 +233,124 @@ function BarberPage() {
               </motion.div>
             )}
           </AnimatePresence>
+          )}
         </div>
       </main>
     </div>
   );
 }
+
+function BarberHistory({ barberId }: { barberId: string }) {
+  const { t } = useTranslation();
+  const [logs, setLogs] = useState<Shaving[]>([]);
+  const [classes, setClasses] = useState<SchoolClass[]>([]);
+  const [q, setQ] = useState("");
+  const [classFilter, setClassFilter] = useState("all");
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
+
+  useEffect(() => {
+    const a = subscribeBarberShavings(barberId, setLogs);
+    const b = subscribeClasses(setClasses);
+    return () => { a(); b(); };
+  }, [barberId]);
+
+  const filtered = useMemo(() => {
+    const fromTs = from ? new Date(from).getTime() : 0;
+    const toTs = to ? new Date(to).getTime() + 86400000 : Infinity;
+    const ql = q.trim().toLowerCase();
+    return logs.filter((s) =>
+      (classFilter === "all" || s.className === classFilter) &&
+      s.createdAt >= fromTs && s.createdAt <= toTs &&
+      (!ql || s.studentName.toLowerCase().includes(ql) || s.className.toLowerCase().includes(ql)),
+    );
+  }, [logs, q, classFilter, from, to]);
+
+  const total = filtered.reduce((acc, s) => acc + (s.pricePerShave || 0), 0);
+
+  function exportPdf() {
+    const doc = new jsPDF();
+    doc.text("HairTrack — Barber Shaving Logs", 14, 16);
+    doc.setFontSize(10);
+    doc.text(`${filtered.length} records • ${total.toLocaleString()} RWF`, 14, 22);
+    autoTable(doc, {
+      startY: 28,
+      head: [[t("students.date"), t("students.student" as never) || "Student", t("students.class"), t("students.price")]],
+      body: filtered.map((s) => [
+        format(new Date(s.createdAt), "PPp"),
+        s.studentName, s.className, s.pricePerShave,
+      ]),
+      headStyles: { fillColor: [14, 85, 102] },
+    });
+    doc.save(`my-shavings-${Date.now()}.pdf`);
+  }
+
+  return (
+    <div className="space-y-4">
+      <Card className="p-5">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h2 className="font-bold text-lg">{t("barberApp.myLogsTitle")}</h2>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              {t("barberApp.myLogsSubtitle", { n: filtered.length, total: total.toLocaleString() })}
+            </p>
+            <p className="text-xs text-muted-foreground italic mt-1">{t("barberApp.myLogsDesc")}</p>
+          </div>
+          <Button size="sm" variant="outline" onClick={exportPdf} disabled={!filtered.length}>
+            {t("common.exportPdf")}
+          </Button>
+        </div>
+
+        <div className="mt-4 space-y-2">
+          <div className="relative">
+            <Search className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <Input className="pl-9" placeholder={t("barberApp.searchLogs")} value={q} onChange={(e) => setQ(e.target.value)} />
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <Select value={classFilter} onValueChange={setClassFilter}>
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{t("barberApp.allClasses")}</SelectItem>
+                {classes.map((c) => <SelectItem key={c.id} value={c.name}>{c.name}</SelectItem>)}
+              </SelectContent>
+            </Select>
+            <div className="col-span-1">
+              <Label className="text-[10px] uppercase text-muted-foreground">{t("barberApp.fromDate")}</Label>
+              <Input type="date" value={from} onChange={(e) => setFrom(e.target.value)} />
+            </div>
+            <div className="col-span-1">
+              <Label className="text-[10px] uppercase text-muted-foreground">{t("barberApp.toDate")}</Label>
+              <Input type="date" value={to} onChange={(e) => setTo(e.target.value)} />
+            </div>
+            <Button variant="ghost" className="self-end" onClick={() => { setQ(""); setClassFilter("all"); setFrom(""); setTo(""); }}>
+              {t("common.reset")}
+            </Button>
+          </div>
+        </div>
+      </Card>
+
+      <Card className="overflow-hidden">
+        {filtered.length === 0 ? (
+          <p className="p-10 text-center text-sm text-muted-foreground italic">{t("barberApp.noLogs")}</p>
+        ) : (
+          <div className="divide-y">
+            {filtered.map((s) => (
+              <div key={s.id} className="p-4 flex items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="font-medium truncate">{s.studentName}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {s.className} • {format(new Date(s.createdAt), "MMM d, yyyy HH:mm")}
+                  </p>
+                </div>
+                <span className="text-sm font-semibold text-success whitespace-nowrap">
+                  +{s.pricePerShave.toLocaleString()} RWF
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </Card>
+    </div>
+  );
+}
+
