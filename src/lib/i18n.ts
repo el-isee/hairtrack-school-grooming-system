@@ -440,7 +440,6 @@ if (!i18n.isInitialized) {
       supportedLngs: ["en", "rw"],
       load: "languageOnly",
       nonExplicitSupportedLngs: true,
-      initImmediate: false,
       detection: {
         order: ["localStorage", "navigator"],
         caches: ["localStorage"],
