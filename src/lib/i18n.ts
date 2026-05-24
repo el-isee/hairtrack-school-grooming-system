@@ -430,19 +430,26 @@ const rw: typeof en = {
   },
 };
 
-i18n
-  .use(LanguageDetector)
-  .use(initReactI18next)
-  .init({
-    resources: { en: { translation: en }, rw: { translation: rw } },
-    fallbackLng: "en",
-    supportedLngs: ["en", "rw"],
-    detection: {
-      order: ["localStorage", "navigator"],
-      caches: ["localStorage"],
-      lookupLocalStorage: "hairtrack.lang",
-    },
-    interpolation: { escapeValue: false },
-  });
+if (!i18n.isInitialized) {
+  i18n
+    .use(LanguageDetector)
+    .use(initReactI18next)
+    .init({
+      resources: { en: { translation: en }, rw: { translation: rw } },
+      fallbackLng: "en",
+      supportedLngs: ["en", "rw"],
+      load: "languageOnly",
+      nonExplicitSupportedLngs: true,
+      initImmediate: false,
+      detection: {
+        order: ["localStorage", "navigator"],
+        caches: ["localStorage"],
+        lookupLocalStorage: "hairtrack.lang",
+      },
+      interpolation: { escapeValue: false },
+      react: { useSuspense: false },
+      returnEmptyString: false,
+    });
+}
 
 export default i18n;
