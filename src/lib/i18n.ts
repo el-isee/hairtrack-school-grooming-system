@@ -60,13 +60,13 @@ const en = {
     emailPlaceholder: "you@school.rw",
     passwordPlaceholder: "••••••••",
     welcomeBack: "Welcome back, {{name}}",
-    feature1: "Fraud-proof verification with secret codes",
-    feature2: "Real-time dashboards & PDF reports",
+    feature1: "Verify each shave with the student's secret code",
+    feature2: "Live overview and printable reports",
     description:
-      "Track payments, verify shaves with secret codes, and manage barbers with confidence — in real time.",
+      "Track payments, confirm each shave with the student's secret code, and manage your barbers with confidence — as it happens.",
     setupTitle: "First-time setup",
     setupText:
-      "Create an admin in Firebase Authentication with email admin@hairtrack.app — that account will become the admin automatically on first sign-in.",
+      "To create the first admin, ask your IT helper to add an account with the email admin@hairtrack.app — that account becomes the admin the first time it signs in.",
     backHome: "← Back to home",
     failed: "Login failed",
   },
