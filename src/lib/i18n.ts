@@ -253,11 +253,11 @@ const rw: typeof en = {
     name: "HairTrack",
     tagline: "Gucunga imisatsi y'abanyeshuri, byoroshye.",
     admin: "Umuyobozi",
-    adminConsole: "Ikibaho cy'Umuyobozi",
+    adminConsole: "Ahantu h'Umuyobozi",
     barber: "Umwogoshi",
   },
   nav: {
-    dashboard: "Ikibaho",
+    dashboard: "Incamake",
     students: "Abanyeshuri",
     classes: "Amashuri",
     barbers: "Abogoshi",
