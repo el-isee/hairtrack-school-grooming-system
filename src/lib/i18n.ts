@@ -286,8 +286,8 @@ const rw: typeof en = {
   },
   loadingApp: "Biraza gutangira HairTrack…",
   dashboard: {
-    title: "Ikibaho",
-    subtitle: "Incamake ya HairTrack ako kanya",
+    title: "Incamake",
+    subtitle: "Incamake y'ishuri ryawe ako kanya",
     totalStudents: "Abanyeshuri Bose",
     paidStudents: "Abanyeshuri Bishyuye",
     moneyCollected: "Amafaranga Yakusanyijwe",
