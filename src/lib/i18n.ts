@@ -72,8 +72,8 @@ const en = {
   },
   loadingApp: "Loading HairTrack…",
   dashboard: {
-    title: "Dashboard",
-    subtitle: "Real-time overview of HairTrack",
+    title: "Overview",
+    subtitle: "Live overview of your school",
     totalStudents: "Total Students",
     paidStudents: "Paid Students",
     moneyCollected: "Money Collected",
