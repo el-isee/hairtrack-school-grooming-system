@@ -39,7 +39,7 @@ const en = {
     name: "HairTrack",
     tagline: "School hair management, made simple.",
     admin: "Admin",
-    adminConsole: "Admin Console",
+    adminConsole: "Admin Area",
     barber: "Barber",
   },
   nav: {
