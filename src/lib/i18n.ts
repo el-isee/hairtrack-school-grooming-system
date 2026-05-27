@@ -274,13 +274,13 @@ const rw: typeof en = {
     emailPlaceholder: "wowe@ishuri.rw",
     passwordPlaceholder: "••••••••",
     welcomeBack: "Murakaza neza, {{name}}",
-    feature1: "Kwemeza bidashobora kubeshywa hakoreshejwe kode y'ibanga",
-    feature2: "Ikibaho gikora ako kanya & raporo za PDF",
+    feature1: "Emeza buri kogosha hakoreshejwe kode y'ibanga y'umunyeshuri",
+    feature2: "Incamake ifatika n'ubutumwa bushobora gucapwa",
     description:
-      "Genzura ubwishyu, emeza kogosha hakoreshejwe kode y'ibanga, kandi ucunge abogoshi mu buryo bwizewe — ako kanya.",
+      "Genzura ubwishyu, emeza buri kogosha hakoreshejwe kode y'ibanga y'umunyeshuri, kandi ucunge abogoshi mu buryo bwizewe — ibi bibera ako kanya.",
     setupTitle: "Iyinjizamo rya mbere",
     setupText:
-      "Rema umuyobozi kuri Firebase Authentication ukoresheje imeli admin@hairtrack.app — iyo konti izahita iba iy'umuyobozi mu kwinjira kwa mbere.",
+      "Kugira ngo wongereho umuyobozi wa mbere, saba umufasha wawe wa IT kongeraho konti ikoresha imeli admin@hairtrack.app — iyo konti izahita iba iy'umuyobozi mu kwinjira kwa mbere.",
     backHome: "← Subira ahabanza",
     failed: "Kwinjira byanze",
   },
