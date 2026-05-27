@@ -99,10 +99,6 @@ function LoginPage() {
             </Button>
           </form>
 
-          <div className="mt-6 rounded-xl border bg-muted/40 p-4 text-xs text-muted-foreground">
-            <p className="font-semibold text-foreground mb-1">{t("login.setupTitle")}</p>
-            {t("login.setupText")}
-          </div>
 
           <p className="mt-6 text-center text-xs text-muted-foreground">
             <Link to="/" className="hover:text-primary">{t("login.backHome")}</Link>
